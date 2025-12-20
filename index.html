@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Pendulum Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+
+    <div class="controls">
+
+        <h2>Initial Values</h2>
+
+        <div class="input-group">
+            <label for="theta10">Angle 1</label>
+            <input type="number" id="theta10" value="1" min="-3.14" max="3.14">
+        </div>
+
+        <div class="input-group">
+            <label for="theta20">Angle 2</label>
+            <input type="number" id="theta20" value="0" min="-3.14" max="3.14">
+        </div>
+
+        <div class="input-group">
+            <label for="theta1_0">Angular velocity 1</label>
+            <input type="number" id="theta1_0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="theta2_0">Angular velocity 2</label>
+            <input type="number" id="theta2_0" value="0">
+        </div>
+        
+        <button id="start-btn">Start Simulation</button>
+        <button id="stop-btn">Stop Simulation</button>
+
+        <hr>
+
+        <h2>Parameters</h2>
+
+        <div class="input-group">
+            <label for="m1">Mass 1 (m1)</label>
+            <input type="number" id="m1" value="1" min="0.01">
+        </div>
+
+        <div class="input-group">
+            <label for="m2">Mass 2 (m2)</label>
+            <input type="number" id="m2" value="1" min="0.01">
+        </div>
+
+        <div class="input-group">
+            <label for="l1">Length 1 (r1)</label>
+            <input type="number" id="l1" value="1" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="l2">Length 2 (r2)</label>
+            <input type="number" id="l2" value="1" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="w1">Width 1</label>
+            <input type="number" id="w1" value="0.02" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="w2">Width 2</label>
+            <input type="number" id="w2" value="0.02" min="0">
+        </div>
+
+         <div class="input-group">
+            <label for="CD1">Aerodynamic drag coefficient</label>
+            <input type="number" id="CD1" value="1.2" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="CD2">Aerodynamic drag coefficient</label>
+            <input type="number" id="CD2" value="1.2" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="BM1">Mass of bearing 1</label>
+            <input type="number" id="BM1" value="0.2" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="BM2">Mass of bearing 2</label>
+            <input type="number" id="BM2" value="0.2" min="0">
+        </div>
+
+         <div class="input-group">
+            <label for="BOR1">Outer radius of bearing 1</label>
+            <input type="number" id="BOR1" value="0.03" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="BOR2">Outer radius of bearing 2</label>
+            <input type="number" id="BOR2" value="0.03" min="0">
+        </div>
+
+         <div class="input-group">
+            <label for="BIR1">Inner radius of bearing 1</label>
+            <input type="number" id="BIR1" value="0.02" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="BIR2">Inner radius of bearing 2</label>
+            <input type="number" id="BIR2" value="0.02" min="0">
+        </div>
+
+         <div class="input-group">
+            <label for="f1">Friction coefficient of bearing 1</label>
+            <input type="number" id="f1" value="0.002" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="f2">Friction coefficient of bearing 2</label>
+            <input type="number" id="f2" value="0.002" min="0">
+        </div>
+
+         <div class="input-group">
+            <label for="k1">Bearing constant of bearing 1</label>
+            <input type="number" id="k1" value="0.03" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="k2">Bearing constant of bearing 2</label>
+            <input type="number" id="k2" value="0.03" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="n1">Coefficient of viscosity of lubricant in bearing 1</label>
+            <input type="number" id="n1" value="0.02" min="0">
+        </div>
+
+       <div class="input-group">
+            <label for="n2">Coefficient of viscosity of lubricant in bearing 2</label>
+            <input type="number" id="n2" value="0.02" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="g">Gravity (g)</label>
+            <input type="number" id="g" value="1">
+        </div>
+
+        <div class="input-group">
+            <label for="p">Density of air</label>
+            <input type="number" id="p" value="1.225" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="ds">Length step for calculating drag</label>
+            <input type="number" id="ds" value="0.001" min="0.00001" max="1">
+        </div>
+
+        <div class="input-group">
+            <label for="dt">Time step</label>
+            <input type="number" id="dt" value="0.0025" min="0.00001" max="1">
+        </div>
+
+        <button id="reset-btn">Reset Variables</button>
+
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <script src="sketch.js"></script>
+</body>
+</html>
