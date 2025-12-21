@@ -44,8 +44,10 @@ function RK4_step (y, dt) {
 
 function setup() {
     // Attach canvas to our specific container
-    let canvas = createCanvas(windowWidth - 300, windowHeight);
-    canvas.parent('canvas-container');
+    let container = document.getElementById('canvas-container');
+    let cnv = createCanvas(container.offsetWidth, container.offsetHeight);
+    cnv.parent('canvas-container');
+    windowResized();
     rectMode(CORNERS);
     frameRate(30);
     // Initialize Variables based on Inputs
@@ -66,7 +68,7 @@ function draw() {
     
     textSize(20);
     fill('white');
-    text(time.toFixed(3), 40, 40);
+    text(time.toFixed(3), width-90, 40);
 
     translate(width/2, height/4);
 
@@ -174,9 +176,15 @@ function readInitialValue () {
     y = [g("t1d")*(Math.PI/180), g("t2d")*(Math.PI/180), g("t1")*(Math.PI/180), g("t2")*(Math.PI/180)];
 }
 
-document.getElementById("start-sim-btn").addEventListener("click", startSim);
-document.getElementById("stop-sim-btn").addEventListener("click", stopSim);
-document.getElementById("reset-sim-btn").addEventListener("click", resetSim);
+function addEvents (elementArray, eve, func) {
+    for (let i = 0; i < elementArray.length; i++) {
+        elementArray[i].addEventListener(eve, func);
+    }
+}
+
+addEvents(document.getElementsByClassName("start-sim-btn"), "click", startSim);
+addEvents(document.getElementsByClassName("stop-sim-btn"), "click", stopSim);
+addEvents(document.getElementsByClassName("reset-sim-btn"), "click", resetSim);
 
 let paramsElements = document.getElementsByClassName("params");
 for (let i = 0; i < paramsElements.length; i++) {
@@ -188,6 +196,8 @@ for (let i = 0; i < initialValueElements.length; i++) {
     initialValueElements[i].addEventListener("input", function () {
         if (!running) {
             readInitialValue();
+            readParams();
+            time = 0;
         }
     });
 }
@@ -207,5 +217,7 @@ function resetSim() {
 
 // Handle window resize
 function windowResized() {
-    resizeCanvas(windowWidth - 300, windowHeight);
+    // Resize the canvas to fill the container whenever the window size changes
+    let container = document.getElementById('canvas-container');
+    resizeCanvas(container.offsetWidth, container.offsetHeight);
 }

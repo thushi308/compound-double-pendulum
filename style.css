@@ -6,9 +6,12 @@ body {
     background-color: #1a1a1a;
     color: #eee;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    position: relative; /* Needed for absolute positioning on mobile */
 }
 
+/* Sidebar styling */
 .controls {
     width: 300px;
     background-color: #2b2b2b;
@@ -17,8 +20,26 @@ body {
     flex-direction: column;
     gap: 15px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-    z-index: 10;
-    overflow: auto;
+    z-index: 100; /* Ensure it sits above canvas */
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: 100%;     /* Full height */
+    box-sizing: border-box; /* Ensures padding doesn't add to width */
+    transition: left 0.3s ease-in-out; /* Smooth slide animation */
+}
+
+.control-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+    > button {
+        flex: 1 1 auto;
+    }
+}
+
+.sim-buttons {
+    display: none;
 }
 
 h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 1px solid #444; padding-bottom: 10px; }
@@ -31,23 +52,20 @@ h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 1px solid #444; padding-bo
 
 .input-group label { margin-bottom: 5px; color: #aaa; }
 
-/* Number Input Styling */
 input[type="number"] {
     background-color: #333;
     border: 1px solid #555;
     color: #fff;
-    padding: 8px;
+    padding: 10px; /* Larger padding for touch targets */
     border-radius: 4px;
     font-size: 1rem;
     outline: none;
 }
 
-input[type="number"]:focus {
-    border-color: #00bcd4;
-}
+input[type="number"]:focus { border-color: #00bcd4; }
 
 button {
-    padding: 10px;
+    padding: 12px; /* Larger touch target */
     background-color: #00bcd4;
     border: none;
     border-radius: 4px;
@@ -55,7 +73,7 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 button:hover { background-color: #008ba3; }
@@ -66,4 +84,90 @@ button:hover { background-color: #008ba3; }
     justify-content: center;
     align-items: center;
     background-color: #000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+/* --- Mobile Specific Elements (Hidden on Desktop) --- */
+
+/* The 'Settings' button */
+#mobile-menu-btn {
+    display: none; /* Hidden by default on PC */
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 50;
+    background-color: rgba(43, 43, 43, 0.8);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    border: 1px solid #444;
+}
+
+/* The 'Close' button inside the menu */
+#close-menu-btn {
+    display: none;
+    background-color: #ff4444;
+    margin-bottom: 15px;
+}
+
+/* --- MEDIA QUERY: MOBILE DEVICES (Under 768px width) --- */
+@media (max-width: 768px) {
+    
+    /* Reveal the toggle button */
+    #mobile-menu-btn {
+        display: block;
+    }
+
+    /* Reveal the close button */
+    #close-menu-btn {
+        display: block;
+    }
+
+    /* Transform controls into an off-canvas drawer */
+    .controls {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: 85%; /* Leave a small gap to see canvas edge */
+        max-width: 320px;
+        transform: translateX(-100%); /* Hide off-screen */
+        transition: transform 0.3s ease-in-out;
+        z-index: 100; /* Top most layer when open */
+    }
+
+    /* The class added by JS to slide the menu in */
+    .controls.active {
+        transform: translateX(0); /* Slide in */
+        box-shadow: 10px 0 20px rgba(0,0,0,0.8);
+    }
+
+    .control-buttons {
+        display: none;
+    }
+
+    .sim-buttons {
+        position: fixed;        /* Break out of the sidebar flow */
+        bottom: 0px;           /* Distance from bottom */
+        left: 50%;              /* Center horizontally */
+        transform: translateX(-50%);
+        display: flex;
+        width: 100%;
+        flex-direction: row;    /* Side by side buttons */
+        gap: 10px;
+        z-index: 40;            /* Above canvas, below sidebar */
+        background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent backing */
+        padding: 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        backdrop-filter: blur(4px);
+        > button {
+            word-wrap: break-word;
+            flex: 1 1 auto;
+        }
+    }
 }

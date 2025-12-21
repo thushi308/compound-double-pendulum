@@ -9,7 +9,11 @@
 </head>
 <body>
 
-    <div class="controls">
+    <button id="mobile-menu-btn">⚙️ Settings</button>
+
+    <div class="controls" id="controls-panel">
+        
+        <button id="close-menu-btn">&times; Close</button>
 
         <h2>Initial Values</h2>
 
@@ -32,10 +36,12 @@
             <label for="t2d">Angular velocity 2</label>
             <input type="number" class="initial-value" id="t2d" value="0">
         </div>
-       
-        <button id="start-sim-btn">Start Simulation</button>
-        <button id="stop-sim-btn">Stop Simulation</button>
-        <button id="reset-sim-btn">Reset Simulation</button>
+
+        <div class="control-buttons">
+            <button class="start-sim-btn">Start Simulation</button>
+            <button class="stop-sim-btn">Stop Simulation</button>
+            <button class="reset-sim-btn">Reset Simulation</button>
+        </div>
 
         <hr>
 
@@ -170,8 +176,27 @@
 
     </div>
 
+    <div class="sim-buttons">
+        <button class="start-sim-btn">Start Simulation</button>
+        <button class="stop-sim-btn">Stop Simulation</button>
+        <button class="reset-sim-btn">Reset Simulation</button>
+    </div>
+
     <div id="canvas-container"></div>
 
     <script src="sketch.js"></script>
+
+    <script>
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const controls = document.getElementById('controls-panel');
+
+        function toggleMenu() {
+            controls.classList.toggle('active');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+    </script>
 </body>
 </html>
