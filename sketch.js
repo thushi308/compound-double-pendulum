@@ -42,12 +42,23 @@ function RK4_step (y, dt) {
     return result;
 }
 
+let ro;
+
 function setup() {
     // Attach canvas to our specific container
-    let container = document.getElementById('canvas-container');
+
+    const container = document.getElementById('canvas-container');
+
     let cnv = createCanvas(container.offsetWidth, container.offsetHeight);
     cnv.parent('canvas-container');
-    windowResized();
+
+    ro = new ResizeObserver(entries => {
+        const { width, height } = entries[0].contentRect;
+        resizeCanvas(width, height);
+    });
+
+    ro.observe(container);
+
     rectMode(CORNERS);
     frameRate(30);
     // Initialize Variables based on Inputs
@@ -218,6 +229,8 @@ function resetSim() {
 // Handle window resize
 function windowResized() {
     // Resize the canvas to fill the container whenever the window size changes
-    let container = document.getElementById('canvas-container');
-    resizeCanvas(container.offsetWidth, container.offsetHeight);
+    //let container = document.getElementById('canvas-container');
+    //resizeCanvas(container.offsetWidth, container.offsetHeight);
 }
+
+document.addEventListener("DOMContentLoaded", windowResized);
